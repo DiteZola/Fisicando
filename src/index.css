@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+@theme {
+  --color-duo-green: #58cc02;
+  --color-duo-green-dark: #46a302;
+  --color-duo-blue: #1cb0f6;
+  --color-duo-yellow: #ffc800;
+  --color-duo-red: #ff4b4b;
+  --color-duo-gray: #e5e5e5;
+  --color-duo-text: #4b4b4b;
+  --color-muted: #afafaf;
+  --radius-duo: 16px;
+}
+
+@layer base {
+  body {
+    @apply bg-white text-[var(--color-duo-text)] font-sans antialiased;
+  }
+}
+
+.duo-button {
+  @apply relative inline-flex items-center justify-center px-6 py-3 font-bold text-white transition-all duration-150 rounded-xl border-b-4 border-black/20 active:border-b-0 active:translate-y-[2px] disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.duo-card {
+  @apply bg-white border-2 border-[var(--color-duo-gray)] rounded-2xl p-6 transition-all;
+}
+
+.duo-card-locked {
+  @apply bg-gray-50 border-gray-100 opacity-50 grayscale contrast-50 pointer-events-none cursor-not-allowed shadow-none scale-95;
+}
+
+/* Theme Specific Components */
+
+.mascot {
+  @apply w-[80px] h-[80px] md:w-[120px] md:h-[120px] bg-duo-green rounded-[16px] md:rounded-[24px] relative flex items-center justify-center border-b-4 border-duo-green-dark;
+}
+
+.speech-bubble {
+  @apply bg-white border-2 border-[var(--color-duo-gray)] rounded-[12px] md:rounded-[18px] p-4 md:p-[20px_30px] relative flex-grow shadow-[0_4px_0_var(--color-duo-gray)];
+}
+
+.speech-bubble::before {
+  content: '';
+  @apply absolute -left-[10px] bottom-[20px] w-4 h-4 md:w-[20px] md:h-[20px] bg-white border-l-2 border-b-2 border-[var(--color-duo-gray)] rotate-45;
+}
+
+.option-card {
+  @apply bg-white border-2 border-[var(--color-duo-gray)] rounded-[12px] md:rounded-[16px] p-3 md:p-5 text-base md:text-lg font-bold cursor-pointer flex items-center gap-4 shadow-[0_4px_0_var(--color-duo-gray)] transition-all active:translate-y-[2px] active:shadow-none;
+}
+
+.option-card:hover {
+  @apply bg-gray-50 border-sky-300 shadow-[0_4px_0_theme(colors.sky.300)];
+}
+
+.option-number {
+  @apply text-[var(--color-muted)] text-sm border-2 border-[var(--color-duo-gray)] w-[30px] h-[30px] flex items-center justify-center rounded-lg;
+}
+
+.level-tag {
+  @apply bg-duo-yellow text-white px-[15px] py-[5px] rounded-[20px] font-bold text-xs shadow-[0_2px_0_#C79A00];
+}
+
+.btn-check {
+  @apply relative inline-flex items-center justify-center py-3 font-bold text-white transition-all duration-150 rounded-xl border-b-4 border-black/20 active:border-b-0 active:translate-y-[2px] disabled:opacity-50 disabled:cursor-not-allowed bg-duo-green px-[60px] uppercase tracking-[0.8px];
+}
+
+.btn-skip {
+  @apply relative inline-flex items-center justify-center py-3 font-bold transition-all duration-150 rounded-xl border-b-4 border-black/20 active:border-b-0 active:translate-y-[2px] disabled:opacity-50 disabled:cursor-not-allowed bg-white border-2 border-[var(--color-duo-gray)] text-[var(--color-muted)] px-[30px] uppercase tracking-[0.8px];
+}

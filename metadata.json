@@ -1,0 +1,6 @@
+{
+  "name": "Fisicando - Quiz de Física",
+  "description": "Um aplicativo de quiz de física gamificado para alunos da 7ª à 9ª classe, inspirado no estilo Duolingo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["AI-powered question generation"]
+}
