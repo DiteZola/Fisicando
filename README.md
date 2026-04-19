@@ -1,20 +1,57 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Fisicando - Quiz de Física Gamificado 🦉🚀
 
-# Run and deploy your AI Studio app
+Um aplicativo interativo e gamificado para aprender Física, inspirado no design do Duolingo. Desenvolvido para alunos da 7ª, 8ª e 9ª classe seguindo o currículo de Angola.
 
-This contains everything you need to run your app locally.
+## ✨ Funcionalidades
 
-View your app in AI Studio: https://ai.studio/apps/87535b9b-54ea-42b1-8fbb-f12ac94355d5
+- **Mapa de Progresso**: Navegue por temas como "O Universo", "Energia" e "Mecânica".
+- **Sistema de Níveis**: Ganhe XP, suba de nível de maestria (20 acertos) e desbloqueie novos temas (100 acertos).
+- **Gamificação**: Sistema de vidas (Corações), sequências (Streaks) e medalhas secretas.
+- **Transições Suaves**: Animações fluidas entre perguntas e temas.
+- **IA Integrada**: Geração dinâmica de perguntas para um desafio infinito.
+- **Modo Desafio**: Teste seus conhecimentos contra o tempo.
 
-## Run Locally
+## 🛠️ Tecnologias Utilizadas
 
-**Prerequisites:**  Node.js
+- **React 19** + **TypeScript**
+- **Vite** (Build tool rápida)
+- **Tailwind CSS** (Estilização moderna)
+- **Motion (Framer Motion)** (Animações fluidas)
+- **Lucide React** (Ícones bonitos)
+- **Google Gemini AI** (Geração de desafios inteligentes)
 
+## 🚀 Como Executar o Projeto no GitHub
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+1. **Clonar o Repositório**:
+   ```bash
+   git clone https://github.com/seu-usuario/fisicando.git
+   cd fisicando
+   ```
+
+2. **Instalar Dependências**:
+   ```bash
+   npm install
+   ```
+
+3. **Configurar Variáveis de Ambiente**:
+   Crie um arquivo `.env` baseado no `.env.example` e adicione sua chave de API do Gemini:
+   ```env
+   GEMINI_API_KEY=sua_chave_aqui
+   ```
+
+4. **Iniciar o Servidor de Desenvolvimento**:
+   ```bash
+   npm run dev
+   ```
+
+5. **Gerar Versão de Produção**:
+   ```bash
+   npm run build
+   ```
+
+## 📄 Licença
+
+Este projeto é de código aberto e está sob a licença [Apache-2.0](LICENSE).
+
+---
+Desenvolvido com ❤️ para inspirar jovens cientistas!
