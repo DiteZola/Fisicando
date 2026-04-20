@@ -298,46 +298,39 @@ export default function App() {
     const targetCount = countMap[targetDifficulty];
     
     try {
-      // 1. Fetch AI questions as priority (request more to ensure variety)
-      const aiQuestions = await generateNewQuestions(grade, topic, Math.ceil(targetCount * 0.8), stats.completedQuestions);
-      
-      // If AI returns nothing, we might be in offline/quota-exhausted mode
-      if (aiQuestions.length === 0) {
-        setIsOfflineMode(true);
-      } else {
-        setIsOfflineMode(false);
-      }
-
-      // 2. Get seed questions (Filter out already completed ones)
-      const seedQuestions = INITIAL_QUESTIONS.filter(q => 
+      // 1. Get seed questions from massive internal bank first (Filter out duplicates by text)
+      const internalQuestions = INITIAL_QUESTIONS.filter(q => 
         q.grade === grade && 
         q.topic === topic && 
         !stats.completedQuestions.includes(q.id)
       );
       
-      // 3. Combine and shuffle
-      let allPossible = [...aiQuestions, ...seedQuestions];
+      let pool = [...internalQuestions];
 
-      // Remove duplicates
-      const unique = allPossible.filter((q, index, self) => 
+      // 2. If pool is small, try AI as a bonus/variety boost (but don't wait long/fail if it fails)
+      // Only request a few AI questions if we have less than enough in the local bank
+      if (pool.length < targetCount) {
+        const aiQuestions = await generateNewQuestions(grade, topic, 5, stats.completedQuestions);
+        pool.push(...aiQuestions);
+      }
+      
+      // 3. Remove duplicates by text to ensure quality
+      const unique = pool.filter((q, index, self) => 
         index === self.findIndex((t) => t.text === q.text)
       );
 
-      // 4. Fill if needed from other topics in same grade (not completed)
+      // 4. Fill if still needed using already completed questions (resetting the cycle)
       if (unique.length < targetCount) {
-        const fallback = INITIAL_QUESTIONS.filter(q => 
-          q.grade === grade && 
-          !stats.completedQuestions.includes(q.id)
-        );
-        unique.push(...fallback.slice(0, targetCount - unique.length));
+        const fallback = INITIAL_QUESTIONS.filter(q => q.grade === grade && q.topic === topic);
+        unique.push(...fallback.sort(() => Math.random() - 0.5).slice(0, targetCount - unique.length));
       }
 
+      // Shuffling final set
       const shuffled = unique.sort(() => Math.random() - 0.5).slice(0, targetCount);
-      
       setQuestions(shuffled);
+      setIsOfflineMode(true); // Defaulting to offline mode since we have a massive bank
     } catch (e) {
-      console.error("Quiz startup error:", e);
-      // Fallback to initial seeds if API fails
+      // Fallback to initial seeds if something fails
       const basicQuestions = INITIAL_QUESTIONS.filter(q => q.grade === grade);
       setQuestions(basicQuestions.slice(0, targetCount));
     } finally {

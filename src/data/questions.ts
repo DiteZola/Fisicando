@@ -1,6 +1,9 @@
 import { Question } from '../types';
+import { ALL_GRADE_7 } from './questions/grade7';
+import { ALL_GRADE_8 } from './questions/grade8';
+import { ALL_GRADE_9 } from './questions/grade9';
 
-export const INITIAL_QUESTIONS: Question[] = [
+const CORE_QUESTIONS: Question[] = [
   // --- 7ª CLASSE ---
   {
     id: '7-uni-1',
@@ -1752,4 +1755,11 @@ export const INITIAL_QUESTIONS: Question[] = [
     grade: 9,
     topic: 'Electricidade e magnetismo'
   }
+];
+
+export const INITIAL_QUESTIONS: Question[] = [
+  ...CORE_QUESTIONS,
+  ...ALL_GRADE_7,
+  ...ALL_GRADE_8,
+  ...ALL_GRADE_9
 ];
