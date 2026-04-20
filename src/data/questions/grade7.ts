@@ -1,4 +1,4 @@
-import { Question } from '../types';
+import { Question } from '../../types';
 
 export const GRADE_7_QUESTIONS: Question[] = [
   // --- O UNIVERSO (7ª Classe) ---

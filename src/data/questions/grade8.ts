@@ -1,4 +1,4 @@
-import { Question } from '../types';
+import { Question } from '../../types';
 
 export const GRADE_8_QUESTIONS: Question[] = [
   // --- TRABALHO E ENERGIA (8ª Classe) ---

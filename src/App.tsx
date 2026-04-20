@@ -30,7 +30,6 @@ import {
 import { Question, UserStats, GradeContent, Achievement, Difficulty } from './types';
 import { INITIAL_QUESTIONS } from './data/questions';
 import { ACHIEVEMENTS } from './data/achievements';
-import { generateNewQuestions } from './services/geminiService';
 
 const GRADES: GradeContent[] = [
   {
@@ -298,28 +297,16 @@ export default function App() {
     const targetCount = countMap[targetDifficulty];
     
     try {
-      // 1. Get seed questions from massive internal bank first (Filter out duplicates by text)
+      // Get internal questions (Filter out already completed ones)
       const internalQuestions = INITIAL_QUESTIONS.filter(q => 
         q.grade === grade && 
         q.topic === topic && 
         !stats.completedQuestions.includes(q.id)
       );
       
-      let pool = [...internalQuestions];
-
-      // 2. If pool is small, try AI as a bonus/variety boost (but don't wait long/fail if it fails)
-      // Only request a few AI questions if we have less than enough in the local bank
-      if (pool.length < targetCount) {
-        const aiQuestions = await generateNewQuestions(grade, topic, 5, stats.completedQuestions);
-        pool.push(...aiQuestions);
-      }
+      let unique = [...internalQuestions];
       
-      // 3. Remove duplicates by text to ensure quality
-      const unique = pool.filter((q, index, self) => 
-        index === self.findIndex((t) => t.text === q.text)
-      );
-
-      // 4. Fill if still needed using already completed questions (resetting the cycle)
+      // Fill if needed using already completed questions (resetting the cycle)
       if (unique.length < targetCount) {
         const fallback = INITIAL_QUESTIONS.filter(q => q.grade === grade && q.topic === topic);
         unique.push(...fallback.sort(() => Math.random() - 0.5).slice(0, targetCount - unique.length));
@@ -328,36 +315,13 @@ export default function App() {
       // Shuffling final set
       const shuffled = unique.sort(() => Math.random() - 0.5).slice(0, targetCount);
       setQuestions(shuffled);
-      setIsOfflineMode(true); // Defaulting to offline mode since we have a massive bank
+      setIsOfflineMode(true); 
     } catch (e) {
       // Fallback to initial seeds if something fails
       const basicQuestions = INITIAL_QUESTIONS.filter(q => q.grade === grade);
       setQuestions(basicQuestions.slice(0, targetCount));
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const prefetchExtraQuestions = async () => {
-    // Background task to refine/add more questions during quiz if pool is low
-    // Don't prefetch if we are already in offline/quota-exhausted mode
-    if (isOfflineMode) return;
-
-    if (view === 'quiz' && questions.length < (currentIndex + 5)) {
-      const extra = await generateNewQuestions(currentGrade, currentTopic, 3, stats.completedQuestions);
-      if (extra.length > 0) {
-        setQuestions(prev => {
-          const combined = [...prev, ...extra];
-          // Filter out questions already in state or already completed
-          return combined.filter((q, idx, self) => 
-            !stats.completedQuestions.includes(q.id) &&
-            idx === self.findIndex(t => t.text === q.text)
-          );
-        });
-      } else {
-        // If prefetch fails, stop trying for this session
-        setIsOfflineMode(true);
-      }
     }
   };
 
@@ -378,9 +342,6 @@ export default function App() {
       if (view === 'challenge') {
         setChallengeScore(prev => prev + 1);
       } else {
-        // Refine/Prefetch more questions after a successful answer to keep the pool fresh
-        prefetchExtraQuestions();
-
         setStats(prev => {
           const topicKey = `${currentGrade}-${currentQuestion.topic}`;
           const newTopicCount = (prev.correctPerTopic[topicKey] || 0) + 1;
