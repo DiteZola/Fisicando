@@ -21,9 +21,26 @@
     </style>
   </head>
   <body>
-    <div id="root"></div>
-    <!-- Caminho relativo para garantir compatibilidade total no GitHub Pages -->
+    <div id="root">
+      <div style="height: 100vh; display: flex; align-items: center; justify-content: center; font-family: sans-serif; text-align: center; padding: 20px;">
+        <div id="loading-fallback">
+          <h2 style="color: #4b4b4b;">A carregar o Fisicando...</h2>
+          <p style="color: #afafaf;">Se esta tela não desaparecer em 5 segundos, verifique se publicou a pasta "dist" ou o branch correto.</p>
+        </div>
+      </div>
+    </div>
     <script type="module" src="./src/main.tsx"></script>
+    <script>
+      // Esconder o fallback se o React carregar
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          var root = document.getElementById('root');
+          if (root && root.innerHTML.includes('A carregar')) {
+            console.warn('React failed to mount.');
+          }
+        }, 5000);
+      });
+    </script>
   </body>
 </html>
 
